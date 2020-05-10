@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
 import re
 
 from generation import WGGenerator
@@ -33,7 +34,7 @@ if __name__ == '__main__':
         help='Number of bits for peer number in subnet',
     )
 
-    parser.add_argument('--server-output', type=str, help='A path to dump configs to')
+    parser.add_argument('--server-output', type=str, help='A path to dump configs to', required=True)
 
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--peers', type=int, metavar='N', help='Peer count')
@@ -65,15 +66,26 @@ if __name__ == '__main__':
         subnet_newbits=args.subnet_newbits
     )
 
-    print('Server:')
-    print(generator.server_config.dumps())
-    print('-' * 40)
-    print('-' * 40)
+    so_dir = args.server_output
+    if not os.path.exists(so_dir):
+        os.mkdir(so_dir)
+    if not os.path.isdir(so_dir):
+        print(f'Error! {so_dir} is not a directory')
+        exit(1)
 
-    print('Clients:')
+    if os.listdir(so_dir):
+        print(f'Error! {so_dir} is not empty')
+        exit(1)
+
+    server_config_path = os.path.join(so_dir, 'server.conf')
+    with open(server_config_path, 'w') as f:
+        f.write(generator.server_config.dumps())
 
     for peer in peers:
-        print('Peer', peer)
-        print(('-' * 40 + '\n' + '-' * 40 + '\n').join(x.dumps() for x in generator.peer_configs[peer]))
-        print('-' * 40)
-        print('-' * 40)
+        peer_config_dir = os.path.join(so_dir, f'peer{peer:03}')
+        os.mkdir(peer_config_dir)
+
+        for conf in generator.peer_configs[peer]:
+            peer_config_path = os.path.join(peer_config_dir, f'peer{peer:03}_{peer}')
+            with open(peer_config_path, 'w') as f:
+                f.write(conf.dumps())
