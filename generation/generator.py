@@ -2,8 +2,8 @@ from typing import List
 
 from netaddr import IPNetwork
 
-from key import WGKey
-from wg_config import WGConfig, ConfigSection
+from .key import WGKey
+from .wg_config import WGConfig, ConfigSection
 
 
 class WGGenerator:

@@ -3,7 +3,7 @@
 import argparse
 import re
 
-from generator import WGGenerator
+from generation import WGGenerator
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate Wireguard configuration files')
