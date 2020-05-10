@@ -9,29 +9,37 @@ from generation import WGGenerator
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate Wireguard configuration files')
 
-    parser.add_argument('--server', type=str, help='Server public address', required=True)
-    parser.add_argument('--server-number', type=int, default=0, help='Server number (for multiple servers)')
+    parser.add_argument(
+        '--server', type=str,
+        metavar='example.com',
+        help='Server public address', required=True,
+    )
+    parser.add_argument(
+        '--server-number', type=int,
+        metavar='N', default=0,
+        help='Server number when using with multiple servers (default 0)',
+    )
 
     peer_group = parser.add_mutually_exclusive_group()
     peer_group.add_argument(
         '--per-peer', type=int,
         default=2, metavar='N',
-        help='Number of clients per one peer',
+        help='Number of clients per one peer (default 2)',
     )
     peer_group.add_argument(
         '--single-peer', action='store_true',
-        help='Force a single peer',
+        help='Force a single peer (/32 subnet)',
     )
 
     parser.add_argument(
         '--subnet', type=str,
         default='10.60.0.0/16', metavar='0.0.0.0/0',
-        help='Main subnet to add clients to',
+        help='Main subnet to add clients to (default 10.60.0.0/16)',
     )
     parser.add_argument(
         '--subnet-newbits', type=int,
         default=8, metavar='N',
-        help='Number of bits for peer number in subnet',
+        help='Number of bits for peer number in subnet (default 8)',
     )
 
     parser.add_argument('--server-output', type=str, help='A path to dump configs to', required=True)
