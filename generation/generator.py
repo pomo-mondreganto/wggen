@@ -73,7 +73,7 @@ class WGGenerator:
                     values={
                         'Address': str(peer_subnet[0]),
                         'PrivateKey': self._peer_keys[group][peer].private,
-                        'ListenPort': 21000 + self._server_number * 1000 + group * self._per_group + peer,
+                        'ListenPort': 21000 + (self._server_number % 1000) * 1000 + group * self._per_group + peer,
                     },
                 )
                 peer_conf.add_section(peer_interface)
