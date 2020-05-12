@@ -41,6 +41,11 @@ if __name__ == '__main__':
         default=8, metavar='N',
         help='Number of bits for group subnet in base subnet (default 8)',
     )
+    parser.add_argument(
+        '--routes', type=str,
+        default='10.0.0.0/8', metavar='0.0.0.0/0,192.168.1.0/24',
+        help='Comma-separated list of subnets to route through VPN on clients (default 10.0.0.0/8)',
+    )
 
     parser.add_argument('--server-output', type=str, help='A path to dump configs to', required=True)
 
@@ -66,7 +71,7 @@ if __name__ == '__main__':
 
     generator = WGGenerator(server=args.server, server_number=args.server_number, per_group=args.per_group,
                             group_list=groups, single_peer=args.single_peer, subnet=args.subnet,
-                            subnet_newbits=args.subnet_newbits)
+                            subnet_newbits=args.subnet_newbits, routed_subnets=args.routes)
 
     so_dir = args.server_output
     if not os.path.exists(so_dir):
