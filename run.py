@@ -47,6 +47,12 @@ if __name__ == '__main__':
         help='Comma-separated list of subnets to route through VPN on clients (default 10.0.0.0/8)',
     )
 
+    parser.add_argument(
+        '--group-name', type=str,
+        default='group', metavar='NAME',
+        help='Name of the group (e.g. "team") for peer comment (default "group")',
+    )
+
     parser.add_argument('--server-output', type=str, help='A path to dump configs to', required=True)
 
     group = parser.add_mutually_exclusive_group(required=True)
@@ -71,7 +77,7 @@ if __name__ == '__main__':
 
     generator = WGGenerator(server=args.server, server_number=args.server_number, per_group=args.per_group,
                             group_list=groups, single_peer=args.single_peer, subnet=args.subnet,
-                            subnet_newbits=args.subnet_newbits, routed_subnets=args.routes)
+                            subnet_newbits=args.subnet_newbits, routed_subnets=args.routes, group_name=args.group_name)
 
     so_dir = args.server_output
     if not os.path.exists(so_dir):
@@ -89,10 +95,10 @@ if __name__ == '__main__':
         f.write(generator.server_config.dumps())
 
     for group in groups:
-        group_config_dir = os.path.join(so_dir, f'group{group:03}')
+        group_config_dir = os.path.join(so_dir, f'{args.group_name}{group:03}')
         os.mkdir(group_config_dir)
 
         for peer, conf in generator.peer_configs[group].items():
-            peer_config_path = os.path.join(group_config_dir, f'group{group:03}_{peer + 1}.conf')
+            peer_config_path = os.path.join(group_config_dir, f'{args.group_name}{group:03}_{peer + 1}.conf')
             with open(peer_config_path, 'w') as f:
                 f.write(conf.dumps())

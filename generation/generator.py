@@ -8,7 +8,7 @@ from .wg_config import WGConfig, ConfigSection
 
 class WGGenerator:
     def __init__(self, server: str, server_number: int, per_group: int, group_list: List[int], single_peer: bool,
-                 subnet: str, subnet_newbits: int, routed_subnets: str):
+                 subnet: str, subnet_newbits: int, routed_subnets: str, group_name: str):
         self._server = server
         self._server_number = server_number
         self._per_group = per_group
@@ -17,6 +17,7 @@ class WGGenerator:
         self._subnet = IPNetwork(subnet)
         self._subnet_newbits = subnet_newbits
         self._routed_subnets = routed_subnets
+        self._group_name = group_name
 
         self._server_port = 30000 + self._server_number
 
@@ -63,7 +64,8 @@ class WGGenerator:
                     values={
                         'PublicKey': self._peer_keys[group][peer].public,
                         'AllowedIPs': str(peer_subnet),
-                    }
+                    },
+                    comment=self._group_name + str(group),
                 )
                 self.server_config.add_section(peer_section)
 

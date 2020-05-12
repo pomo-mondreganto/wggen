@@ -1,13 +1,17 @@
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 
 class ConfigSection:
-    def __init__(self, name: str, values: Dict[str, Any]):
+    def __init__(self, name: str, values: Dict[str, Any], comment: Optional[str] = None):
         self.name = name
         self.values = values
+        self.comment = comment
 
     def dumps(self):
-        return f'[{self.name}]\n' + '\n'.join(f'{k} = {v}' for k, v in self.values.items())
+        headers = f'[{self.name}]\n'
+        comment = f'# {self.comment}\n' if self.comment else ''
+        content = '\n'.join(f'{k} = {v}' for k, v in self.values.items())
+        return headers + comment + content
 
 
 class WGConfig:
