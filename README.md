@@ -3,8 +3,8 @@ Simple Wireguard config generator
 
 To generate configurations, execute `run.py` script in the project root. Supported options:
 
-```
-./run.py -h
+```console
+foo@bar:~/wggen$ ./run.py -h
 usage: run.py [-h] --server example.com [--server-number N]
               [--per-peer N | --single-peer] [--subnet 0.0.0.0/0]
               [--subnet-newbits N] --server-output SERVER_OUTPUT
