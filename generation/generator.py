@@ -65,7 +65,7 @@ class WGGenerator:
                         'PublicKey': self._peer_keys[group][peer].public,
                         'AllowedIPs': str(peer_subnet),
                     },
-                    comment=self._group_name + str(group),
+                    comment=f'friendly_name = {self._group_name}{group}',
                 )
                 self.server_config.add_section(peer_section)
 
